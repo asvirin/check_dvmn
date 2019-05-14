@@ -20,7 +20,7 @@ def get_status_homework():
 def main():
     telegram_token = os.getenv("telegram_token")
     authorization_token_dvmn = os.getenv("authorization_token_dvmn")
-    chat_id = = os.getenv("chat_id")
+    chat_id = os.getenv("chat_id")
     
     headers = {'Authorization': authorization_token_dvmn}
     params = {'timestamp': timestamp}
