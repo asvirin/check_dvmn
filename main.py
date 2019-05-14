@@ -33,7 +33,7 @@ def main():
     except requests.exceptions.ReadTimeout:
         while True:
             get_status_homework()
-    except requests.ConnectionError:
+    except requests.exceptions.ConnectionError:
         while True:
             get_status_homework()
     
