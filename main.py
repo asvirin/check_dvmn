@@ -9,7 +9,7 @@ def get_status_homework():
     response = requests.get(url, headers=headers, params=params)
     answer = response.json()
     
-    if error in answer:
+    if answer['error'] in answer:
         raise requests.exceptions.HTTPError(bot.send_message(chat_id=chat_id, \
                                                              text='Ошибка при запросе: {}'.format(answer['error'])))
     status_answer = answer['status']
