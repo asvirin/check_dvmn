@@ -8,6 +8,10 @@ def get_status_homework():
     url = 'https://dvmn.org/api/long_polling/'
     response = requests.get(url, headers=headers, params=params)
     answer = response.json()
+    
+    if error in answer:
+        raise requests.exceptions.HTTPError(bot.send_message(chat_id=chat_id, \
+                                                             text='Ошибка при запросе: {}'.format(answer['error'])))
     status_answer = answer['status']
     
     if status_answer == 'timeout':
@@ -16,8 +20,9 @@ def get_status_homework():
         bot.send_message(chat_id=chat_id, text='Задача проверена, но есть ошибки(')
     elif status_answer == 'found' and answer['solution_attempts']['is_negative'] is False:
         bot.send_message(chat_id=chat_id, text='Задача проверена, ошибок нет!')
-        
-def main():
+    
+    
+if __name__ == '__main__':
     telegram_token = os.getenv("telegram_token")
     authorization_token_dvmn = os.getenv("authorization_token_dvmn")
     chat_id = os.getenv("chat_id")
@@ -26,17 +31,11 @@ def main():
     params = {'timestamp': timestamp}
     timestamp = int(time.time()) 
     bot = telegram.Bot(token=telegram_token)
-     
-    try:
-        while True:
+        
+    while True:
+        try:
             get_status_homework()
-    except requests.exceptions.ReadTimeout:
-        while True:
+        except requests.exceptions.ReadTimeout:
             get_status_homework()
-    except requests.exceptions.ConnectionError:
-        while True:
+        except requests.ConnectionError:
             get_status_homework()
-    
-    
-if __name__ == '__main__':
-    main()
