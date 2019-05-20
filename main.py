@@ -14,13 +14,16 @@ def get_text_answer(answer):
     lesson_title = answer['new_attempts'][0]['lesson_title']
     lesson_url = 'https://dvmn.org{}'.format(answer['new_attempts'][0]['lesson_url'])
     status_answer = answer['new_attempts'][0]['is_negative']
-    
-    if status_answer:
+
+    if answer['status'] == 'timeout':
+        return answer['timestamp_to_request']
+    elif status_answer:
         message = 'Задача "{}" проверена, но есть ошибки( \n*Ссылка*: {}'.format(lesson_title, lesson_url)
     else:
         message = 'Задача проверена, ошибок нет!'
-        
-    send_message(message) 
+    
+    send_message(message)
+    return answer['last_attempt_timestamp']
     
     
 def get_status_homework(timestamp):
@@ -33,11 +36,7 @@ def get_status_homework(timestamp):
     
     try:
         response.raise_for_status()
-        if answer['status'] == 'timeout':
-            return answer['timestamp_to_request']
-        else:
-            get_text_answer(answer)
-            return answer['last_attempt_timestamp']
+        return get_text_answer(answer)
     except requests.exceptions.HTTPError:
         message = 'Ошибка при запросе статуса задачи: {}'.format(answer)
         send_message(message)
