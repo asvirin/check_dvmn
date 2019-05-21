@@ -11,13 +11,14 @@ def send_message(message):
     bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
     
 def get_text_answer(answer):
+    if answer['status'] == 'timeout':
+        return answer['timestamp_to_request']
+    
     lesson_title = answer['new_attempts'][0]['lesson_title']
     lesson_url = 'https://dvmn.org{}'.format(answer['new_attempts'][0]['lesson_url'])
     status_answer = answer['new_attempts'][0]['is_negative']
-
-    if answer['status'] == 'timeout':
-        return answer['timestamp_to_request']
-    elif status_answer:
+    
+    if status_answer:
         message = 'Задача "{}" проверена, но есть ошибки( \n*Ссылка*: {}'.format(lesson_title, lesson_url)
     else:
         message = 'Задача проверена, ошибок нет!'
