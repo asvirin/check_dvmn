@@ -26,7 +26,6 @@ def get_text_answer(answer):
     send_message(message)
     return answer['last_attempt_timestamp']
     
-    
 def get_status_homework(timestamp):
     url = 'https://dvmn.org/api/long_polling/'
     params = {'timestamp': timestamp}
