@@ -5,8 +5,8 @@ import time
 import telegram
 
 def send_message(message):
-    bot = telegram.Bot(token=os.environ("telegram_token"))
-    chat_id = os.environ("chat_id")
+    bot = telegram.Bot(token=os.environ('telegram_token'))
+    chat_id = os.environ('chat_id')
     bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
     
 def get_text_answer(answer):
@@ -28,7 +28,7 @@ def get_text_answer(answer):
 def get_status_homework(timestamp):
     url = 'https://dvmn.org/api/long_polling/'
     params = {'timestamp': timestamp}
-    headers = {'Authorization': os.environ("authorization_token_dvmn")}
+    headers = {'Authorization': os.environ('authorization_token_dvmn')}
     
     response = requests.get(url, headers=headers, params=params)
     answer = response.json()
