@@ -3,6 +3,7 @@ import os
 import requests
 import time
 import telegram
+import logging
 
 def send_message(message):
     bot = telegram.Bot(token=os.environ['telegram_token'])
@@ -42,6 +43,7 @@ def get_status_homework(timestamp):
         time.sleep(1800)
     
 if __name__ == '__main__':
+    logging.warning('Бот запущен')
     timestamp = int(time.time())
     while True:
         try:
