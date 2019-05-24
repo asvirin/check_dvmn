@@ -8,6 +8,7 @@ verify_ssl = true
 
 requests = "*"
 telegram = "*"
+python-telegram-bot = "*"
 
 
 [requires]
