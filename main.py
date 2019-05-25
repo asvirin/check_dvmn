@@ -46,6 +46,7 @@ def get_status_homework(timestamp):
     except requests.exceptions.HTTPError:
         message = 'Ошибка при запросе статуса задачи: {}'.format(answer)
         send_message(message)
+        logger.info(err, exc_info=True)
         time.sleep(1800)
     
 if __name__ == '__main__':
