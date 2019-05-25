@@ -58,8 +58,8 @@ if __name__ == '__main__':
     while True:
         try:
             timestamp = get_status_homework(timestamp)
+        except (requests.exceptions.ReadTimeout, requests.ConnectionError):
+            continue
         except Exception as err:
             logger.info('Что-то сломалось, нужно чинить, вот ошибка ↓')
             logger.info(err, exc_info=True)
-            time.sleep(14400)
-            continue
