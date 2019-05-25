@@ -1,9 +1,15 @@
-#!/usr/bin/env python
 import os
 import requests
 import time
 import telegram
 import logging
+
+class MyLogsHandler(logging.Handler):
+    def emit(self, record):
+        bot_error = telegram.Bot(token=os.environ['telegram_token'])
+        chat_id = os.environ['chat_id']
+        log_entry = self.format(record)
+        bot_error.send_message(chat_id=chat_id, text=log_entry, parse_mode=telegram.ParseMode.MARKDOWN)
 
 def send_message(message):
     bot = telegram.Bot(token=os.environ['telegram_token'])
@@ -43,7 +49,10 @@ def get_status_homework(timestamp):
         time.sleep(1800)
     
 if __name__ == '__main__':
-    logging.warning('Бот запущен')
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    logger.addHandler(MyLogsHandler())
+    logger.info('Бот запущен')
     timestamp = int(time.time())
     while True:
         try:
