@@ -11,7 +11,7 @@ class MyLogsHandler(logging.Handler):
         log_entry = self.format(record)
         bot_error.send_message(chat_id=chat_id, text=log_entry, parse_mode=telegram.ParseMode.MARKDOWN)
 
-def send_message(message):
+def send_messages(message):
     bot = telegram.Bot(token=os.environ['telegram_token'])
     chat_id = os.environ['chat_id']
     bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
@@ -43,20 +43,23 @@ def get_status_homework(timestamp):
     try:
         response.raise_for_status()
         return get_text_answer(answer)
-    except requests.exceptions.HTTPError as err:
+    except requests.exceptions.HTTPError:
         message = 'Ошибка при запросе статуса задачи: {}'.format(answer)
         send_message(message)
-        logger.info(err, exc_info=True)
-        time.sleep(1800)
+        time.sleep(3600)
     
 if __name__ == '__main__':
+    timestamp = int(time.time())
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     logger.addHandler(MyLogsHandler())
-    logger.info('Бот запущен')
-    timestamp = int(time.time())
+    logger.info("Бот запущен")
     while True:
         try:
             timestamp = get_status_homework(timestamp)
-        except (requests.exceptions.ReadTimeout, requests.ConnectionError):
+        except Exception as err:
+            print(err)
+            logger.info('Что-то сломалось, нужно чинить, вот ошибка ↓')
+            logger.info(err, exc_info=True)
+            time.sleep(14400)
             continue
