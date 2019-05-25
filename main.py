@@ -8,13 +8,14 @@ class MyLogsHandler(logging.Handler):
     def emit(self, record):
         bot_error = telegram.Bot(token=os.environ['telegram_token'])
         chat_id = os.environ['chat_id']
+        
         log_entry = self.format(record)
-        bot_error.send_message(chat_id=chat_id, text=log_entry, parse_mode=telegram.ParseMode.MARKDOWN)
+        bot_error.send_message(chat_id=chat_id, text=log_entry)
 
-def send_messages(message):
+def send_message(message):
     bot = telegram.Bot(token=os.environ['telegram_token'])
     chat_id = os.environ['chat_id']
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
+    bot.send_message(chat_i=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
     
 def get_text_answer(answer):
     if answer['status'] == 'timeout':
@@ -58,7 +59,6 @@ if __name__ == '__main__':
         try:
             timestamp = get_status_homework(timestamp)
         except Exception as err:
-            print(err)
             logger.info('Что-то сломалось, нужно чинить, вот ошибка ↓')
             logger.info(err, exc_info=True)
             time.sleep(14400)
