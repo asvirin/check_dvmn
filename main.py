@@ -15,7 +15,7 @@ class MyLogsHandler(logging.Handler):
 def send_message(message):
     bot = telegram.Bot(token=os.environ['telegram_token'])
     chat_id = os.environ['chat_id']
-    bot.send_message(chat_i=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
+    bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
     
 def get_text_answer(answer):
     if answer['status'] == 'timeout':
