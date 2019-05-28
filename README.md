@@ -16,7 +16,7 @@
 
 ### Этап 3. Запустить бота. Пример запуска
 ```python
-python3 grab_movies.py
+python3 main.py
 ```
 # Требования
 Все требуемые модули указаны в файле requirements.txt
