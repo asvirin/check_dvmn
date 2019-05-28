@@ -31,4 +31,5 @@ python3 pip install -r requirements.txt
 2) В файлах Pipfile и reqirements.txt указаны необходимые модули для работы бота.
 
 # Автор бота
+Алексей Свирин
 Телеграм — [@svirin](https://telegram.me/svirin)
