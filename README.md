@@ -19,7 +19,7 @@
 python3 main.py
 ```
 # Требования
-Все требуемые модули указаны в файле requirements.txt
+Все требуемые модули указаны в файле requirements.txt  
 Для установки запустите команду:
 ```python
 python3 pip install -r requirements.txt
