@@ -4,7 +4,7 @@
 # Как установить
 ### Этап 1. Для запуска бота необходимо получить ключи от нескольких сервисов
 1) Создать бота в telegram через [Отца ботов](https://telegram.me/BotFather) и взять токен для авторизации.
-2) Узнать свой ID через [специального бота](https://telegram.me/@userinfobot).
+2) Узнать свой ID через [специального бота](https://telegram.me/userinfobot).
 3) Узнать токен для авторизации сервиса devman в документации по [API](https://dvmn.org/api/docs/).
 
 ### Этап 2. Установить переменные окружения
@@ -29,3 +29,6 @@ python3 pip install -r requirements.txt
 Для запуска на Heroku необходимы файлы Procfile и Pipfile:
 1) В файле Procfile прописано какой файл нужно запускать на Heroku.
 2) В файлах Pipfile и reqirements.txt указаны необходимые модули для работы бота.
+
+# Автор бота
+Телеграм — [@svirin](https://telegram.me/userinfobot)
