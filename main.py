@@ -41,8 +41,7 @@ def return_new_timestamp(timestamp, bot):
         response.raise_for_status()
         return get_last_timestamp(answer, bot)
     except requests.exceptions.HTTPError:
-        message = 'Ошибка при запросе статуса задачи: {}'.format(answer)
-        send_message(message, bot)
+        logger.error('Ошибка при запросе статуса задачи: {}'.format(answer))
         time.sleep(3600)
     
 if __name__ == '__main__':
