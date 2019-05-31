@@ -2,18 +2,12 @@ import os
 import requests
 import time
 import telegram
-import logging
-
-class MyLogsHandler(logging.Handler):
-    def emit(self, record):
-        bot_error = bot
-        log_entry = self.format(record)
-        bot_error.send_message(chat_id=chat_id, text='Сервисное сообщение от логгера ↓\n{}'.format(log_entry))    
+import logging 
 
 def send_message(message, bot):
     bot.send_message(chat_id=chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN, disable_web_page_preview=True)
     
-def get_last_timestamp(answer, bot):
+def handle_response(answer, bot):
     if answer['status'] == 'timeout':
         return answer['timestamp_to_request']
     
@@ -22,14 +16,14 @@ def get_last_timestamp(answer, bot):
     status_answer = answer['new_attempts'][0]['is_negative']
     
     if status_answer:
-        message = 'Задача "{}" проверена, но есть ошибки( \n[*Ссылка*]({})'.format(lesson_title, lesson_url)
+        message = 'Задача "{}" проверена, но есть ошибки( \n[Ссылка на задачу]({})'.format(lesson_title, lesson_url)
     else:
         message = 'Задача проверена, ошибок нет!'
 
     send_message(message, bot)
     return answer['last_attempt_timestamp']
     
-def return_new_timestamp(timestamp, bot):
+def request_new_attempts(timestamp, bot):
     url = 'https://dvmn.org/api/long_polling/'
     params = {'timestamp': timestamp}
     headers = {'Authorization': dvmn_api_token}
@@ -39,9 +33,10 @@ def return_new_timestamp(timestamp, bot):
         
     try:
         response.raise_for_status()
-        return get_last_timestamp(answer, bot)
+        return handle_response(answer, bot)
     except requests.exceptions.HTTPError:
-        logger.error('Ошибка при запросе статуса задачи: {}'.format(answer))
+        message = 'Ошибка при запросе статуса задачи: {}'.format(answer)
+        send_message(message, bot)
         time.sleep(3600)
     
 if __name__ == '__main__':
@@ -53,15 +48,20 @@ if __name__ == '__main__':
     chat_id = os.environ['chat_id']
     bot = telegram.Bot(token=telegram_token)
     
+    class MyLogsHandler(logging.Handler):
+        def emit(self, record):
+            log_entry = self.format(record)
+            bot.send_message(chat_id=chat_id, text='Сервисное сообщение от логгера ↓\n{}'.format(log_entry))
+    
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     logger.addHandler(MyLogsHandler())
     
     logger.info("Бот запущен")
-    
+
     while True:
         try:
-            timestamp = return_new_timestamp(timestamp, bot)
+            timestamp = request_new_attempts(timestamp, bot)
         except (requests.exceptions.ReadTimeout, requests.ConnectionError):
             continue
         except Exception as err:
