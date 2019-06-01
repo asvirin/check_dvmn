@@ -51,7 +51,7 @@ if __name__ == '__main__':
     class MyLogsHandler(logging.Handler):
         def emit(self, record):
             log_entry = self.format(record)
-            bot.send_message(chat_id=chat_id, text='Сервисное сообщение от логгера ↓\n{}'.format(log_entry))
+            bot.send_message(chat_id=chat_id, text=log_entry)
     
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -64,6 +64,6 @@ if __name__ == '__main__':
             timestamp = request_new_attempts(timestamp, bot)
         except (requests.exceptions.ReadTimeout, requests.ConnectionError):
             continue
-        except Exception as err:
-            logger.exception(err)
+        except Exception:
+            logger.exception('Возникла ошибка ↓')
             time.sleep(14400)
